@@ -1,29 +1,51 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import './App.css'
 import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import './App.css'
 
-const firebaseConfig = initializeApp({
-  apiKey: 'AIzaSyAES0YYLs-K_fxgIPSAzM3jZEuKyvKQ8kY',
-  authDomain: 'realtimechat-83158.firebaseapp.com',
-  projectId: 'realtimechat-83158',
-  storageBucket: 'realtimechat-83158.appspot.com',
-  messagingSenderId: '360580154791',
-  appId: '1:360580154791:web:258e088cf0919a54a56282',
-  measurementId: 'G-SHSD9DZXFB',
+initializeApp({
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASURAMENT_ID,
 })
 
-const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
+const auth = getAuth()
 
 function App() {
+  const [user] = useAuthState(auth)
+  console.log(user)
   return (
     <div className='App'>
-      <header className='App-header'></header>
+      <header className='App-header'>
+        <h1>💬 Converse em tempo real</h1>
+        <section>{user ? <ChatRoom /> : <SignIn />}</section>
+      </header>
     </div>
   )
+}
+
+function SignIn() {
+  const signInWithGoogle = () => {
+    const auth = getAuth()
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(auth, provider)
+      .then(result => {
+        console.log(result)
+      })
+      .catch(error => {
+        console.error({ error })
+      })
+  }
+
+  return <button onClick={signInWithGoogle}>Entrar com Google</button>
+}
+
+function ChatRoom() {
+  return <h1>CHAT</h1>
 }
 
 export default App
