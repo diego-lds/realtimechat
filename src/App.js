@@ -17,20 +17,19 @@ const auth = getAuth()
 
 function App() {
   const [user] = useAuthState(auth)
-  console.log(user)
   return (
     <div className='App'>
       <header className='App-header'>
         <h1>💬 Converse em tempo real</h1>
-        <section>{user ? <ChatRoom /> : <SignIn />}</section>
+        <SignOut />
       </header>
+      <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
   )
 }
 
 function SignIn() {
   const signInWithGoogle = () => {
-    const auth = getAuth()
     const provider = new GoogleAuthProvider()
     signInWithPopup(auth, provider)
       .then(result => {
@@ -42,6 +41,16 @@ function SignIn() {
   }
 
   return <button onClick={signInWithGoogle}>Entrar com Google</button>
+}
+
+function SignOut() {
+  return (
+    auth.currentUser && (
+      <button className='sign-out' onClick={() => auth.signOut()}>
+        Sign Out
+      </button>
+    )
+  )
 }
 
 function ChatRoom() {
