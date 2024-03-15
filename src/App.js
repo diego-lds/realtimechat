@@ -1,21 +1,27 @@
 import './App.css'
-import { useEffect } from 'react'
+import {  useState } from 'react'
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-
-import { collection, query } from 'firebase/firestore'
-import { getFirestore } from 'firebase/firestore'
-import { config } from './firebaseConfig'
 import { initializeApp } from 'firebase/app'
+
+import {
+  addDoc,
+  collection,
+  query,
+  serverTimestamp, getFirestore
+} from 'firebase/firestore'
+
+import { config } from './firebaseConfig'
 
 const app = initializeApp(config)
 const db = getFirestore(app)
 const auth = getAuth()
 
 function App() {
-  const [user] = useAuthState(auth)
+  let [user] = useAuthState(auth)
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -28,7 +34,13 @@ function App() {
           <h1>💬 Converse em tempo real</h1>
         )}
       </header>
-      <section>{user ? <ChatRoom /> : <SignIn />}</section>
+      {user ? (
+        <>
+          <ChatRoom />
+        </>
+      ) : (
+        <SignIn />
+      )}
     </div>
   )
 }
@@ -46,24 +58,51 @@ function ChatRoom() {
   const messagesRef = collection(db, 'messages')
   const Query = query(messagesRef)
   const [messages] = useCollectionData(Query, { id: 'id' })
+  console.log(messages)
+  const [text, setText] = useState('')
 
-  if (!messages) return <p>Sem mensagems</p>
+  const sendMessage = async event => {
+    event.preventDefault()
+
+    const { photoURL, uid } = auth.currentUser
+
+    await addDoc(messagesRef, {
+      uid,
+      photoURL,
+      text,
+      createdAt: serverTimestamp(),
+    }).finally(() => setText(''))
+  }
+
   return (
-    <ul>
-      {messages &&
-        messages.map(message => {
-          return <ChatMessage {...message} />
-        })}
-    </ul>
+    <>
+      <ul>
+        {messages &&
+          messages.map((message, index) => {
+            return <ChatMessage key={index} {...message}  />
+          })}
+      </ul>
+      <form onSubmit={sendMessage}>
+        <input
+        type='text' placeholder='Digite sua mensagem...' value={text}
+        onChange={e => setText(e.target.value)}
+        />
+        <button type='submit'>Enviar</button>
+      </form>
+    </>
   )
 }
 
-function ChatMessage({ text, photoUrl }, user) {
+function ChatMessage({ text, photoURL, uid, createdAt }) {
+  
   return (
-    <li className='message-box'>
-      <img alt='alt' src={photoUrl} width='50px' />
-      <div className='message-content'>
-        <p>{text}</p>
+    <li >
+      <div  className='message-box'>
+        <img alt='alt' src={photoURL} width='50px' height='50px' />
+        <div className='message-content'>
+          <span>{auth.currentUser.displayName}</span>
+          <p>{text}</p>
+        </div>
       </div>
     </li>
   )
