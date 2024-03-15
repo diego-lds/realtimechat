@@ -1,12 +1,10 @@
-import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth'
-
-function Profile({ photo, name }) {
+const Profile = ({ username, photoURL }) => {
   return (
     <div className='profile'>
-      <img alt={name} src={photo} />
-      <h6>{name}</h6>
+      <img alt='User profile' src={photoURL} />
+      <p>{username}</p>
     </div>
   )
 }
 
-export default Profile()
+export default Profile

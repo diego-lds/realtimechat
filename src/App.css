@@ -28,22 +28,34 @@
 }
 
 
-.message-box{
+.chat-message{
   display: flex;
   margin:1px;
 }
 
 .message-content{
   text-align: left;
-  min-width:10rem;
-  width: 85%; 
-  height: auto;
+  min-width: 100%; 
   border: black solid 1px;
   overflow: hidden; 
   white-space: normal; 
   text-align: justify;
-  box-sizing: border-box;
   word-wrap: break-word; 
+}
+
+.chat-room{
+  ul{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    list-style-type: none;
+      li{
+        display: flex;     
+        min-width: 15%;
+        border: red solid thin
+      }
+  }
 }
 
 .profile {

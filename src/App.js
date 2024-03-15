@@ -1,33 +1,67 @@
 import './App.css'
-import {  useState } from 'react'
-
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { initializeApp } from 'firebase/app'
+import { useEffect, useState } from 'react'
 
 import {
   addDoc,
   collection,
   query,
-  serverTimestamp, getFirestore
+  serverTimestamp,
+  getFirestore,
+  orderBy,
+  onSnapshot,
 } from 'firebase/firestore'
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { initializeApp } from 'firebase/app'
 import { config } from './firebaseConfig'
+
+import Profile from './components/Profile'
+import ChatRoom from './components/ChatRoom'
 
 const app = initializeApp(config)
 const db = getFirestore(app)
 const auth = getAuth()
+const messagesRef = collection(db, 'messages')
 
 function App() {
-  let [user] = useAuthState(auth)
+  const [user] = useAuthState(auth)
+  const [messages, setMessages] = useState([])
+  const [text, setText] = useState('')
+
+  useEffect(() => {
+    const queryMessages = query(messagesRef, orderBy('createdAt'))
+
+    const unsuscribe = onSnapshot(queryMessages, snapshot => {
+      let messages = []
+      snapshot.forEach(doc => {
+        messages.push({ ...doc.data(), id: doc.id })
+      })
+      setMessages(messages)
+    })
+
+    return () => unsuscribe()
+  }, [])
+
+  const sendMessage = async event => {
+    event.preventDefault()
+
+    const { photoURL, uid, displayName } = auth.currentUser
+    await addDoc(messagesRef, {
+      uid,
+      photoURL,
+      text,
+      displayName,
+      createdAt: serverTimestamp(),
+    }).finally(() => setText(''))
+  }
 
   return (
     <div className='App'>
       <header className='App-header'>
         {user ? (
           <>
-            <Profile photo={user.photoURL} name={user.displayName} />
+            <Profile username={user.displayName} photoURL={user.photoURL} />
             <SignOut />
           </>
         ) : (
@@ -36,7 +70,15 @@ function App() {
       </header>
       {user ? (
         <>
-          <ChatRoom />
+          {messages.length > 0 && <ChatRoom messages={messages} />}{' '}
+          <form onSubmit={sendMessage}>
+            <input
+              type='text'
+              value={text}
+              onChange={e => setText(e.target.value)}
+            />
+            <button type='submit'>Enviar</button>
+          </form>
         </>
       ) : (
         <SignIn />
@@ -45,68 +87,7 @@ function App() {
   )
 }
 
-function Profile({ photo, name }) {
-  return (
-    <div className='profile'>
-      <img alt={name} src={photo} />
-      <h6>{name}</h6>
-    </div>
-  )
-}
 
-function ChatRoom() {
-  const messagesRef = collection(db, 'messages')
-  const Query = query(messagesRef)
-  const [messages] = useCollectionData(Query, { id: 'id' })
-  console.log(messages)
-  const [text, setText] = useState('')
-
-  const sendMessage = async event => {
-    event.preventDefault()
-
-    const { photoURL, uid } = auth.currentUser
-
-    await addDoc(messagesRef, {
-      uid,
-      photoURL,
-      text,
-      createdAt: serverTimestamp(),
-    }).finally(() => setText(''))
-  }
-
-  return (
-    <>
-      <ul>
-        {messages &&
-          messages.map((message, index) => {
-            return <ChatMessage key={index} {...message}  />
-          })}
-      </ul>
-      <form onSubmit={sendMessage}>
-        <input
-        type='text' placeholder='Digite sua mensagem...' value={text}
-        onChange={e => setText(e.target.value)}
-        />
-        <button type='submit'>Enviar</button>
-      </form>
-    </>
-  )
-}
-
-function ChatMessage({ text, photoURL, uid, createdAt }) {
-  
-  return (
-    <li >
-      <div  className='message-box'>
-        <img alt='alt' src={photoURL} width='50px' height='50px' />
-        <div className='message-content'>
-          <span>{auth.currentUser.displayName}</span>
-          <p>{text}</p>
-        </div>
-      </div>
-    </li>
-  )
-}
 
 function SignIn() {
   const signInWithGoogle = () => {
