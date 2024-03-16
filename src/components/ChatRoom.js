@@ -1,7 +1,6 @@
 import ChatMessage from './ChatMessage'
 
 const ChatRoom = ({ messages }) => {
-  console.log('room1', messages)
   if (messages.length === 0) return
   return (
     <div className='chat-room'>

@@ -30,13 +30,15 @@
 
 .chat-message{
   display: flex;
-  margin:1px;
+  margin:2px;
 }
 
 .message-content{
-  text-align: left;
-  min-width: 100%; 
+  max-width: 50%;
+  min-width: 250px; 
   border: black solid 1px;
+  border-radius: 8px;
+  padding: 8px 2px 2px 2px;
   overflow: hidden; 
   white-space: normal; 
   text-align: justify;
@@ -50,11 +52,6 @@
     align-items: start;
     justify-content: start;
     list-style-type: none;
-      li{
-        display: flex;     
-        min-width: 15%;
-        border: red solid thin
-      }
   }
 }
 
@@ -62,14 +59,28 @@
   display: flex; 
   align-items: center;
   justify-content: start;
-}
-
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  button {
+    width: 2rem;
   }
 }
+
+.input-text{
+  display: block;
+  bottom: 0;
+  right: 0;
+  
+  input{
+    border: gray solid thin;
+    width: 85vw;
+    border-radius: 4px;
+    padding: 2px
+  }
+  button{
+    color: white;
+    background-color: slateblue;
+    outline: none;
+    border-radius: 5px;
+  }
+
+}
+
