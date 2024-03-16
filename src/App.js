@@ -15,7 +15,6 @@ import { config } from './firebaseConfig'
 
 import Profile from './components/Profile'
 import ChatRoom from './components/ChatRoom'
-import SignOutButton from './components/SignOutButton'
 import useMessages from './hooks/useMessages'
 
 const app = initializeApp(config)
@@ -26,14 +25,11 @@ const auth = getAuth()
 function App() {
   const [user] = useAuthState(auth)
   const [text, setText] = useState('')
-
   const { messages } = useMessages(messagesRef)
 
   const sendMessage = async event => {
     event.preventDefault()
-
     const { uid, photoURL, displayName } = user
-
     let message = {
       uid,
       photoURL,
@@ -45,28 +41,29 @@ function App() {
     await addDoc(messagesRef, message)
   }
 
-  return (
+  return user ? (
     <main className='App'>
       <header className='App-header'>
-        <Profile username={user.displayName} photoURL={user.photoURL} />
-        <SignOutButton signOut={auth.signOut} />
+        {user && (
+          <Profile username={user?.displayName} photoURL={user?.photoURL} />
+        )}
+        <SignOut />
       </header>
-      {!user ? (
-        <SignIn />
-      ) : (
-        <section>
-          <ChatRoom messages={messages} />
-          <form className='input-text' onSubmit={sendMessage}>
-            <input
-              type='text'
-              value={text}
-              onChange={e => setText(e.target.value)}
-            />
-            <button type='submit'>Enviar</button>
-          </form>
-        </section>
-      )}
+
+      <section>
+        <ChatRoom messages={messages} />
+        <form className='input-text' onSubmit={sendMessage}>
+          <input
+            type='text'
+            value={text}
+            onChange={e => setText(e.target.value)}
+          />
+          <button type='submit'>Enviar</button>
+        </form>
+      </section>
     </main>
+  ) : (
+    user && <SignIn />
   )
 }
 
@@ -78,6 +75,17 @@ function SignIn() {
   }
 
   return <button onClick={signInWithGoogle}>Entrar com Google</button>
+}
+
+function SignOut() {
+  if (!auth) return
+  return (
+    auth.currentUser && (
+      <button className='sign-out' onClick={() => auth.signOut()}>
+        Sign Out
+      </button>
+    )
+  )
 }
 
 
