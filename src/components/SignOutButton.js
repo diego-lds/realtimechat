@@ -1,9 +1,11 @@
-const SignOutButton = ({ signOut }) => {
+const SignOutButton = (signOut) => {
+  
   return (
     <button className='sign-out' onClick={() => signOut()}>
       Deslogar
     </button>
-  )
-}
-
-export default SignOutButton
+)
+  }
+  
+  export default SignOutButton
+  
