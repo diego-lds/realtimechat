@@ -22,49 +22,54 @@ const db = getFirestore(app)
 const messagesRef = collection(db, 'messages')
 const auth = getAuth()
 
+ 
+
 function App() {
-  const [user] = useAuthState(auth)
-  const [text, setText] = useState('')
-  const { messages } = useMessages(messagesRef)
+    const [user] = useAuthState(auth);
+    const [text, setText] = useState('');
+    const { messages } = useMessages(messagesRef);
 
-  const sendMessage = async event => {
-    event.preventDefault()
-    const { uid, photoURL, displayName } = user
-    let message = {
-      uid,
-      photoURL,
-      text,
-      displayName,
-      createdAt: serverTimestamp(),
-    }
+    const sendMessage = async event => {
+        event.preventDefault();
+        const { uid, photoURL, displayName } = user;
+        let message = {
+            uid,
+            photoURL,
+            text,
+            displayName,
+            createdAt: serverTimestamp(),
+        };
 
-    await addDoc(messagesRef, message)
-  }
+        await addDoc(messagesRef, message);
+    };
 
-  return user ? (
-    <main className='App'>
-      <header className='App-header'>
-        {user && (
-          <Profile username={user?.displayName} photoURL={user?.photoURL} />
-        )}
-        <SignOut />
-      </header>
+    return user ? (
+        <main className='App'>
+            <header className='App-header'>
+                {user && (
+                    <Profile
+                        username={user?.displayName}
+                        photoURL={user?.photoURL}
+                    />
+                )}
+                <SignOut />
+            </header>
 
-      <section>
-        <ChatRoom messages={messages} />
-        <form className='input-text' onSubmit={sendMessage}>
-          <input
-            type='text'
-            value={text}
-            onChange={e => setText(e.target.value)}
-          />
-          <button type='submit'>Enviar</button>
-        </form>
-      </section>
-    </main>
-  ) : (
-    user && <SignIn />
-  )
+            <section>
+                <ChatRoom messages={messages} />
+                <form className='form' onSubmit={sendMessage}>
+                    <input
+                        type='text'
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                    />
+                    <button type='submit'>Enviar</button>
+                </form>
+            </section>
+        </main>
+    ) : (
+        !user && <SignIn />
+    );
 }
 
 function SignIn() {

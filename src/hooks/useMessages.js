@@ -6,13 +6,13 @@ function useMessages(messagesRef) {
 
   useEffect(() => {
     const queryMessages = query(messagesRef, orderBy('createdAt'))
+    let result = []
     const unsuscribe = onSnapshot(queryMessages, snapshot => {
-      let result = []
       snapshot.forEach(doc => result.push({ ...doc.data(), id: doc.id }))
       setMessages(result)
     })
     return () => unsuscribe()
-  }, [])
+  }, [messagesRef])
 
   return { messages }
 }

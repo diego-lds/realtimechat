@@ -30,7 +30,6 @@
 
 .chat-message{
   display: flex;
-  margin:2px;
 }
 
 .message-content{
@@ -64,22 +63,36 @@
   }
 }
 
-.input-text{
-  display: block;
-  bottom: 0;
-  right: 0;
-  
+
+.form{
+    position: fixed;
+    bottom:0;
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: #282c34;
+    min-width: 300px;
+
+
+
   input{
-    border: gray solid thin;
-    width: 85vw;
-    border-radius: 4px;
-    padding: 2px
+    width: 100vw;
+    margin: 1rem;
+    outline: none;
+    outline-style: none;
+    border-radius: 5px;
+    border: 1px rgb(163, 163, 163) solid;
+    padding-left: 5px;
+    
   }
   button{
     color: white;
-    background-color: slateblue;
+    background-color: rgb(62, 49, 141);
     outline: none;
-    border-radius: 5px;
+    height: 100%;
+    width: 100px;
+    
   }
 
 }
