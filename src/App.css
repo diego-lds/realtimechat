@@ -63,10 +63,6 @@
   }
 }
 
-main{
-  background-color: white;
-}
-
 
 .form{
     position: fixed;
@@ -99,57 +95,5 @@ main{
     
   }
 
-}
-
-.google--btn{
-  background-color: white;
-  border-radius: 5px;
-  display:flex;
-  align-items: center;
-  width: 200px;
-  padding: 10px;
-  margin-top: 20vh;
-  justify-content: space-around;
-  img{
-    width: 24px;
-  }
-  
-}
-
-.sign-in{
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-    align-items: center;
-  flex-direction: column;
-  h1{
-    font-size: 8rem;
-    color: white;
-    user-select: none; /* Standard syntax */
-
-    
-  }
-}
-
-
-
-body {
-  background: linear-gradient(-45deg, #f55a2b, #e73c7e, #23a6d5);
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-      background-position: 0% 50%;
-  }
-  50% {
-      background-position: 100% 50%;
-  }
-  100% {
-      background-position: 0% 50%;
-  }
 }
 

@@ -1,26 +1,28 @@
-import './App.css';
-import { useState } from 'react';
+import './App.css'
+import { useState } from 'react'
 
 import {
-    addDoc,
-    collection,
-    serverTimestamp,
-    getFirestore,
-} from 'firebase/firestore';
+  addDoc,
+  collection,
+  serverTimestamp,
+  getFirestore,
+} from 'firebase/firestore'
 
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { initializeApp } from 'firebase/app';
-import { config } from './firebaseConfig';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { initializeApp } from 'firebase/app'
+import { config } from './firebaseConfig'
 
-import Profile from './components/Profile';
-import ChatRoom from './components/ChatRoom';
-import useMessages from './hooks/useMessages';
+import Profile from './components/Profile'
+import ChatRoom from './components/ChatRoom'
+import useMessages from './hooks/useMessages'
 
-const app = initializeApp(config);
-const db = getFirestore(app);
-const messagesRef = collection(db, 'messages');
-const auth = getAuth();
+const app = initializeApp(config)
+const db = getFirestore(app)
+const messagesRef = collection(db, 'messages')
+const auth = getAuth()
+
+ 
 
 function App() {
     const [user] = useAuthState(auth);
@@ -71,32 +73,26 @@ function App() {
 }
 
 function SignIn() {
-    const signInWithGoogle = () => {
-        signInWithPopup(auth, new GoogleAuthProvider())
-            .then(result => console.log(result))
-            .catch(error => console.error({ error }));
-    };
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then(result => console.log(result))
+      .catch(error => console.error({ error }))
+  }
 
-    return (
-        <main className='sign-in'>
-            <h1>Chatzinho</h1>
-            <button className='google--btn' onClick={signInWithGoogle}>
-                <img alt='alt' src='/google.png' />
-                Entrar com Google
-            </button>
-        </main>
-    );
+  return <button onClick={signInWithGoogle}>Entrar com Google</button>
 }
 
 function SignOut() {
-    if (!auth) return;
-    return (
-        auth.currentUser && (
-            <button className='sign-out' onClick={() => auth.signOut()}>
-                Sign Out
-            </button>
-        )
-    );
+  if (!auth) return
+  return (
+    auth.currentUser && (
+      <button className='sign-out' onClick={() => auth.signOut()}>
+        Sign Out
+      </button>
+    )
+  )
 }
 
-export default App;
+
+
+export default App
