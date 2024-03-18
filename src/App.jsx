@@ -74,18 +74,26 @@ function App() {
                         </div>
                     </header>
                     <ChatRoom messages={messages} reference={dummy} />
+                    <form className='form' onSubmit={sendMessage}>
+                        <input
+                            type='text'
+                            value={text}
+                            onChange={e => setText(e.target.value)}
+                            placeholder='Digite uma mensagem'
+                        />
+                    </form>
                 </section>
             )}
-
-            <footer>
+            <section>
                 <form className='form' onSubmit={sendMessage}>
                     <input
                         type='text'
                         value={text}
                         onChange={e => setText(e.target.value)}
+                        placeholder='Digite uma mensagem'
                     />
                 </form>
-            </footer>
+            </section>
         </main>
     );
 }

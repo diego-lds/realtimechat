@@ -65,15 +65,10 @@
 }
 
 
-
-
-
-
-
 .form{
     position: fixed;
-    bottom:0;
-    height: 10vh;
+    bottom: 0;
+    height: 5rem;
     margin-top: 10px;
     width: 100%;
     display: flex;

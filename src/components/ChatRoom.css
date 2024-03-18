@@ -12,6 +12,7 @@
     gap: 10px;
     align-items: flex-start;
     justify-content: flex-start;
+    margin-bottom: 3rem;
     list-style-type: none;
   }
 }
