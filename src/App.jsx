@@ -16,7 +16,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { initializeApp } from 'firebase/app';
 import { config } from './firebaseConfig';
 
-import Profile from './components/Profile';
 import ChatRoom from './components/ChatRoom';
 
 const app = initializeApp(config);
@@ -41,6 +40,7 @@ function App() {
         });
 
         return () => unsuscribe();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const sendMessage = async event => {
@@ -57,32 +57,34 @@ function App() {
         await addDoc(messagesRef, message).finally(setText(''));
     };
 
-    return user ? (
+    return (
         <main className='App'>
-            <header className='App-header'>
-                {user && (
-                    <Profile
-                        username={user?.displayName}
-                        photoURL={user?.photoURL}
-                    />
-                )}
-                <SignOut />
-            </header>
+            {!auth.currentUser ? (
+                <SignIn />
+            ) : (
+                <section>
+                    <header className='App-header'>
+                        <h1>Realtime Chat</h1>
+                        <div className='profile'>
+                            <h4>{user?.displayName}</h4>
+                            <img alt='User' src={user?.photoURL} />
+                            <SignOut />
+                        </div>
+                    </header>
+                    <span>chatroom</span>
+                </section>
+            )}
 
-            <section>
-                <ChatRoom messages={messages} />
-                <form className='form' onSubmit={sendMessage}>
-                    <input
-                        type='text'
-                        value={text}
-                        onChange={e => setText(e.target.value)}
-                    />
-                    <button type='submit'>Enviar</button>
-                </form>
-            </section>
+            <ChatRoom messages={messages} />
+            <form className='form' onSubmit={sendMessage}>
+                <input
+                    type='text'
+                    value={text}
+                    onChange={e => setText(e.target.value)}
+                />
+                <button type='submit'>Enviar</button>
+            </form>
         </main>
-    ) : (
-        !user && <SignIn />
     );
 }
 
@@ -98,8 +100,8 @@ function SignIn() {
 
 function SignOut() {
     return (
-        <button className='sign-out' onClick={() => auth.signOut()}>
-            Deslogar
+        <button className='button' onClick={() => auth.signOut()}>
+            Sair
         </button>
     );
 }
