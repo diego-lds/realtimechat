@@ -20,7 +20,7 @@
   align-items: center;
   color: white;
   min-height: 10vh;
-  padding-left:2rem ;
+  
   
 }
 
@@ -31,39 +31,54 @@
 .profile{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap:10px;
-  padding: 0.5rem;
-  margin-right: 2rem;
-  h4{
-    font-size: 1.5rem;
-    margin-left: 1rem
+  justify-content: space-evenly;
+  
+  width: 15vw;
+  margin-right: 1rem;
+}
+.profile button{
+  align-content: end;
+}
+
+.profile img{
+  border-radius: 50%;
+  border: solid 2px white;
+  width: 60px;
+}
+
+.chat-room{
+  height: 100vh;
+}
+
+@media (max-width:600px) {
+  .profile{
+    width: 100%;
+    padding:0;
+    margin-right:5px;
+    justify-content: space-between;
+    padding:1rem;
+  
   }
-  img{
-    border-radius: 50%;
-    border: solid 2px white;
-    min-height: 40px;
-    ;
+  .profile h4{
+    display: none;
+  }
+  .profile img{
+    width: 60px;
+
   }
 
-
-}
-.button{
-  font-size: 1rem;
-  border-radius: 5px;
-}
-.button-google {
-    margin-right: 1rem;
+  .profile button{
+    border: solid white thin;
+    border-radius: 5px;
     padding: 0.5rem;
-    min-width: 100px;
-  
-}
-.button-google:hover{
-  border: solid 1px rgb(146, 144, 156);
-  
+    width: 100px;
 
+  }
+  
+  .title{
+    display: none;
+  }
 }
-
 
 .form{
     position: fixed;
@@ -77,8 +92,8 @@
     min-width: 300px;
     padding: 0.5rem;
 
-
-  input{
+  }
+.form input{
     width: 100vw;
     outline: none;
     outline-style: none;
@@ -86,18 +101,18 @@
     border: 1px rgb(202, 201, 201) solid;
     padding-left: 10px;
     font-size: medium;
-    line-height: normal
-    ;
-    
-  }
-  button{
-    color: white;
-    background-color: rgb(62, 49, 141);
-    outline: none;
-    height: 100%;
-    width: 100px;
-    
-  }
-
+    line-height: normal;
 }
 
+.form button{
+  color: white;
+  background-color: rgb(62, 49, 141);
+  outline: none;
+  height: 100%;
+  width: 100px;
+ 
+}
+
+.title{
+  margin-left: 1rem;
+}

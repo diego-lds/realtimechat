@@ -9,6 +9,7 @@ import {
     query,
     orderBy,
     onSnapshot,
+    limit,
 } from 'firebase/firestore';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -30,7 +31,11 @@ function App() {
     const dummy = useRef();
 
     useEffect(() => {
-        const queryMessages = query(messagesRef, orderBy('createdAt'));
+        const queryMessages = query(
+            messagesRef,
+            orderBy('createdAt'),
+            limit(3)
+        );
 
         const unsuscribe = onSnapshot(queryMessages, snapshot => {
             let messages = [];
@@ -66,10 +71,14 @@ function App() {
             ) : (
                 <section>
                     <header className='App-header'>
-                        <h1>Realtime Chat</h1>
+                        <h1 className='title'>Realtime Chat</h1>
                         <div className='profile'>
                             <h4>{user?.displayName}</h4>
-                            <img alt='User' src={user?.photoURL} />
+                            <img
+                                alt='User'
+                                src='./default-profile.svg'
+                                width={50}
+                            />
                             <SignOut />
                         </div>
                     </header>
@@ -84,16 +93,6 @@ function App() {
                     </form>
                 </section>
             )}
-            <section>
-                <form className='form' onSubmit={sendMessage}>
-                    <input
-                        type='text'
-                        value={text}
-                        onChange={e => setText(e.target.value)}
-                        placeholder='Digite uma mensagem'
-                    />
-                </form>
-            </section>
         </main>
     );
 }
@@ -104,7 +103,6 @@ function SignIn() {
             .then(result => console.log(result))
             .catch(error => console.error({ error }));
     };
-
     return <button onClick={signInWithGoogle}>Entrar com Google</button>;
 }
 
