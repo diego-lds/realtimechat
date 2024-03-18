@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
     addDoc,
@@ -27,6 +27,7 @@ function App() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState('');
     const messagesRef = collection(db, 'messages');
+    const dummy = useRef();
 
     useEffect(() => {
         const queryMessages = query(messagesRef, orderBy('createdAt'));
@@ -55,6 +56,7 @@ function App() {
         };
 
         await addDoc(messagesRef, message).finally(setText(''));
+        dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -71,19 +73,19 @@ function App() {
                             <SignOut />
                         </div>
                     </header>
-                    <span>chatroom</span>
+                    <ChatRoom messages={messages} reference={dummy} />
                 </section>
             )}
 
-            <ChatRoom messages={messages} />
-            <form className='form' onSubmit={sendMessage}>
-                <input
-                    type='text'
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                />
-                <button type='submit'>Enviar</button>
-            </form>
+            <footer>
+                <form className='form' onSubmit={sendMessage}>
+                    <input
+                        type='text'
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                    />
+                </form>
+            </footer>
         </main>
     );
 }

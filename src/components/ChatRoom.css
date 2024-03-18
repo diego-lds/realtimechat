@@ -1,0 +1,44 @@
+/* #FAF9F5 or the 60% is used for background color while 
+#F2EFEA or the 30% is used for their cards
+ #3E3E41 or the rest 10% is used for the buttons. */
+.chat-room{
+    background-color: #F2EFEA;
+    padding: 1rem 1rem 2rem 1rem;
+
+    
+  ul{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    list-style-type: none;
+  }
+}
+
+.chat-message{
+    display:flex;
+    padding: 5px;
+    img{
+        border-radius: 50%;
+        width: 45px;
+    }
+}
+
+.text-content{
+    margin-left: 5px;
+    min-width: 100px;
+    padding: 0.5rem;
+    background-color: white;
+    border: #c6c6d2  solid 1px;
+    font-size: small;
+    border-radius: 8px;
+    overflow: hidden; 
+    white-space: normal; 
+    text-align: justify;
+    word-wrap: break-word; 
+
+}
+
+.chat-wrapper{
+}
