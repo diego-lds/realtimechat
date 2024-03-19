@@ -44,7 +44,7 @@ function App() {
                     userIdMatch,
                 });
             });
-            setMessages(messages);
+            setMessages([]);
         });
 
         return () => unsuscribe();
@@ -66,27 +66,34 @@ function App() {
         dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
     return (
-        <main className='App'>
+        <main className='bg-slate-100'>
             {!auth.currentUser ? (
                 <SignIn />
             ) : (
                 <section>
-                    <header className='App-header'>
-                        <h1 className='title'>Realtime Chat</h1>
-                        <div className='profile'>
-                            <h4>{user?.displayName}</h4>
-                            <img alt='User' src={user?.photoURL} width={50} />
+                    <header className='flex justify-between items-center bg-slate-900 text-white'>
+                        <h1 className=' text-3xl font-bold m-5'>
+                            Realtime Chat
+                        </h1>
+                        <div className='flex items-center m-2 gap-x-3'>
+                            <h4 className='text-xl'>{user?.displayName}</h4>
+                            <img
+                                className='rounded-full border-2'
+                                alt='User'
+                                src={user?.photoURL}
+                                width={50}
+                            />
                             <SignOut />
                         </div>
                     </header>
-                    <section className='wrapper'>
+                    <section>
                         <ChatRoom
                             messages={messages}
                             reference={dummy}
                             userId={user?.currentUser?.uid}
                         />
                     </section>
-                    <form className='form' onSubmit={sendMessage}>
+                    <form onSubmit={sendMessage}>
                         <input
                             type='text'
                             value={text}
@@ -111,7 +118,10 @@ function SignIn() {
 
 function SignOut() {
     return (
-        <button className='button' onClick={() => auth.signOut()}>
+        <button
+            className='w-10 h-30 ml-5 text-xl p-1 border border-black'
+            onClick={() => auth.signOut()}
+        >
             Sair
         </button>
     );

@@ -4,8 +4,8 @@ import './ChatRoom.css';
 const ChatRoom = ({ messages, reference }) => {
     if (messages.length === 0) return;
     return (
-        <div className='chat-room'>
-            <ul className='chat-list'>
+        <div>
+            <ul>
                 {messages.length &&
                     messages.map(msg => {
                         return <ChatMessage {...msg} />;
@@ -19,9 +19,9 @@ const ChatRoom = ({ messages, reference }) => {
 function ChatMessage({ displayName, photoURL, text, id, uid, userIdMatch }) {
     return (
         <li className={userIdMatch ? 'teste' : ''} key={id}>
-            <div className='chat-message'>
+            <div>
                 <img alt='user face' src={photoURL} width={50} />
-                <div className='text-content'>
+                <div>
                     <p>{text}</p>
                 </div>
             </div>
