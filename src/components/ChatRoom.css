@@ -1,51 +1,46 @@
 /* #FAF9F5 or the 60% is used for background color while 
 #F2EFEA or the 30% is used for their cards
  #3E3E41 or the rest 10% is used for the buttons. */
-.chat-room{
-    background-color: #F2EFEA;
-    padding: 1rem 1rem 2rem 1rem;
-
+.chat-room {
+    background-color: #f2efea;
+    margin-bottom: 5rem;
 }
 
-.chat-room ul{
+.chat-room ul {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    background-color: red;
+
     align-items: flex-start;
     justify-content: flex-start;
-    margin-bottom: 3rem;
     list-style-type: none;
-  
 }
-.chat-list li:first-child{
-  color: red;
+.teste {
+    align-self: flex-end;
+    flex-direction: row-reverse;
 }
 
-.chat-message{
-  display:flex;
-    padding: 5px;
-  
-  }
+.chat-message {
+    background-color: orange;
+    display: flex;
+    width: 100%;
+}
 
-.chat-message img{
-    border-radius: 50%
-  }
+.chat-message img {
+    border-radius: 50%;
+    width: 50px;
+    max-width: 50px;
+}
 
-
-.text-content{
-    margin-left: 5px;
-    min-width: 100px;
-    max-width: 300px;
-    padding: 0.5rem;
+.text-content {
+    min-width: 200px;
     background-color: white;
-    border: #c6c6d2  solid 1px;
-    font-size: small;
+    border: #c6c6d2 solid 1px;
+    font-size: medium;
     border-radius: 8px;
-    overflow: hidden; 
-    white-space: normal; 
+    overflow: hidden;
+    white-space: normal;
     text-align: justify;
-    word-wrap: break-word; 
-
+    word-wrap: break-word;
+    word-break: break-all;
 }
-
-

@@ -31,23 +31,25 @@ function App() {
     const dummy = useRef();
 
     useEffect(() => {
-        const queryMessages = query(
-            messagesRef,
-            orderBy('createdAt'),
-            limit(3)
-        );
+        const queryMessages = query(messagesRef, orderBy('createdAt'));
 
         const unsuscribe = onSnapshot(queryMessages, snapshot => {
             let messages = [];
             snapshot.forEach(doc => {
-                messages.push({ ...doc.data(), id: doc.id });
+                const userIdMatch = doc.data().uid === user?.uid;
+                messages.push({
+                    ...doc.data(),
+                    id: doc.id,
+                    key: doc.id,
+                    userIdMatch,
+                });
             });
             setMessages(messages);
         });
 
         return () => unsuscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user]);
 
     const sendMessage = async event => {
         event.preventDefault();
@@ -63,7 +65,6 @@ function App() {
         await addDoc(messagesRef, message).finally(setText(''));
         dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
-
     return (
         <main className='App'>
             {!auth.currentUser ? (
@@ -74,15 +75,17 @@ function App() {
                         <h1 className='title'>Realtime Chat</h1>
                         <div className='profile'>
                             <h4>{user?.displayName}</h4>
-                            <img
-                                alt='User'
-                                src='./default-profile.svg'
-                                width={50}
-                            />
+                            <img alt='User' src={user?.photoURL} width={50} />
                             <SignOut />
                         </div>
                     </header>
-                    <ChatRoom messages={messages} reference={dummy} />
+                    <section className='wrapper'>
+                        <ChatRoom
+                            messages={messages}
+                            reference={dummy}
+                            userId={user?.currentUser?.uid}
+                        />
+                    </section>
                     <form className='form' onSubmit={sendMessage}>
                         <input
                             type='text'

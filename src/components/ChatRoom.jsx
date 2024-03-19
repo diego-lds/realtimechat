@@ -1,3 +1,4 @@
+import { useAuthState } from 'react-firebase-hooks/auth';
 import './ChatRoom.css';
 
 const ChatRoom = ({ messages, reference }) => {
@@ -15,9 +16,9 @@ const ChatRoom = ({ messages, reference }) => {
     );
 };
 
-function ChatMessage({ displayName, photoURL, text, id }) {
+function ChatMessage({ displayName, photoURL, text, id, uid, userIdMatch }) {
     return (
-        <li key={id}>
+        <li className={userIdMatch ? 'teste' : ''} key={id}>
             <div className='chat-message'>
                 <img alt='user face' src={photoURL} width={50} />
                 <div className='text-content'>
