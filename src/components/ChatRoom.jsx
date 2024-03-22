@@ -1,6 +1,6 @@
 const ChatRoom = ({ messages, reference }) => {
     return (
-        <ul className='flex flex-col max-h-full mt-2 bg-stone-200 '>
+        <ul className='flex flex-col max-h-full bg-transparent '>
             {messages?.length &&
                 messages.map(msg => {
                     return <ChatMessage {...msg} />;

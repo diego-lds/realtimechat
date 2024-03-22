@@ -5,9 +5,6 @@ import {
     collection,
     serverTimestamp,
     getFirestore,
-    query,
-    orderBy,
-    onSnapshot,
 } from 'firebase/firestore';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -21,100 +18,111 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const auth = getAuth();
 
+const DATA = [
+    {
+        photoURL: 'default-profile.svg',
+        text: 'text text',
+        id: 'k2kk0k042304k2304242k2',
+        userIdMatch: true,
+    },
+    {
+        photoURL: 'default-profile.svg',
+        text: 'text text',
+        id: 'k2kk0k042304k2304242k2',
+        userIdMatch: false,
+    },
+];
+
 function App() {
     const [user] = useAuthState(auth);
     const [text, setText] = useState('');
-    const [messages, setMessages] = useState();
+    const [messages] = useState(DATA);
     const messagesRef = collection(db, 'messages');
     const dummy = useRef();
 
     useEffect(() => {
-        const queryMessages = query(
-            messagesRef,
-            orderBy('createdAt')
-            // limit(10)
-        );
-
-        const unsuscribe = onSnapshot(queryMessages, snapshot => {
-            let messages = [];
-            // snapshot.forEach(doc => {
-            //     const userIdMatch = doc.data().uid === user?.uid;
-            //     console.log(doc.data().uid, user?.uid);
-            //     messages.push({
-            //         ...doc.data(),
-            //         id: doc.id,
-            //         key: doc.id,
-            //         userIdMatch,
-            //     });
-            // });
-            setMessages(messages);
-        });
-
-        return () => unsuscribe();
+        // const queryMessages = query(
+        //     messagesRef,
+        //     orderBy('createdAt'),
+        //     limit(3)
+        // );
+        // const unsuscribe = onSnapshot(queryMessages, snapshot => {
+        //     let messages = [];
+        //     try {
+        //         snapshot.forEach(doc => {
+        //             const userIdMatch = doc.data().uid === user?.uid;
+        //             console.log(doc.data().uid, user?.uid);
+        //             messages.push({
+        //                 ...doc.data(),
+        //                 id: doc.id,
+        //                 key: doc.id,
+        //                 userIdMatch,
+        //             });
+        //         });
+        //         setMessages(messages);
+        //     } catch (e) {
+        //         console.log(e);
+        //     }
+        // });
+        // return () => unsuscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [messages]);
+    }, []);
 
     const sendMessage = async event => {
         event.preventDefault();
         const { uid, photoURL, displayName } = user;
-        let message = {
+
+        await addDoc(messagesRef, {
             uid,
             photoURL,
             text,
             displayName,
             createdAt: serverTimestamp(),
-        };
-
-        await addDoc(messagesRef, message).finally(setText(''));
-
+        });
+        setText('');
         dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     if (!auth.currentUser) {
-        return (
-            <>
-                <SignIn />
-            </>
-        );
-    } else {
-        return (
-            <>
-                <header className='flex justify-between items-center bg-slate-900 text-white sticky top-0 z-10'>
-                    <h1 className=' text-3xl font-bold m-5'>Realtime Chat</h1>
-                    <div className='flex items-center m-2 gap-x-3'>
-                        <h4 className='text-xl'>{user?.displayName}</h4>
-                        <img
-                            className='rounded-full border-2 '
-                            alt='User'
-                            src={user?.photoURL}
-                            width={55}
-                        />
-                        <SignOut />
-                    </div>
-                </header>
-                <section>
+        return <SignIn />;
+    }
+
+    return (
+        <>
+            <header className='flex justify-between items-center bg-slate-900  text-white sticky top-0 z-10'>
+                <h1 className=' text-3xl font-bold '>Realtime Chat</h1>
+                <div className='flex items-center m-2 gap-x-3'>
+                    <h4 className='text-xl'>{user?.displayName}</h4>
+                    <img
+                        className='rounded-full border-2 '
+                        alt='User'
+                        src={user?.photoURL}
+                        width={55}
+                    />
+                    <SignOut />
+                </div>
+            </header>
+            <section>
+                {messages && (
                     <ChatRoom
                         messages={messages}
                         reference={dummy}
                         userId={user?.currentUser?.uid}
                     />
-                </section>
+                )}
+            </section>
 
-                <form
-                    onSubmit={sendMessage}
-                    className=' sticky bottom-0 w-screen drop-shadow-xl'
-                >
-                    <input
-                        type='text'
-                        value={text}
-                        className='flex w-full min-h-[60px] p-5 rounded-md   border border-stone-300 border-input  text-md shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-                        onChange={e => setText(e.target.value)}
-                        placeholder='Digite uma mensagem'
-                    />
-                </form>
-            </>
-        );
-    }
+            <form onSubmit={sendMessage} className=' fixed bottom-0 w-screen'>
+                <input
+                    type='text'
+                    value={text}
+                    className='flex w-full min-h-[60px]    rounded-md border border-stone-300 border-input  text-md shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+                    onChange={e => setText(e.target.value)}
+                    placeholder='Digite uma mensagem'
+                />
+            </form>
+        </>
+    );
 }
 
 function SignIn() {
@@ -144,21 +152,12 @@ function SignIn() {
                 Entrar na sala com Google
             </button>
         </>
-        // <button
-        //     onClick={signInWithGoogle}
-        //     className='text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'
-        // >
-        //     Entrar com google
-        // </button>
     );
 }
 
 function SignOut() {
     return (
-        <button
-            className='w-10 h-30 ml-5 text-xl p-1 border border-black'
-            onClick={() => auth.signOut()}
-        >
+        <button className='w-10 h-30 text-xl' onClick={() => auth.signOut()}>
             Sair
         </button>
     );
