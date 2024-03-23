@@ -5,6 +5,10 @@ import {
     collection,
     serverTimestamp,
     getFirestore,
+    query,
+    orderBy,
+    limit,
+    onSnapshot,
 } from 'firebase/firestore';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -18,53 +22,35 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const auth = getAuth();
 
-const DATA = [
-    {
-        photoURL: 'default-profile.svg',
-        text: 'text text',
-        id: 'k2kk0k042304k2304242k2',
-        userIdMatch: true,
-    },
-    {
-        photoURL: 'default-profile.svg',
-        text: 'text text',
-        id: 'k2kk0k042304k2304242k2',
-        userIdMatch: false,
-    },
-];
-
 function App() {
     const [user] = useAuthState(auth);
     const [text, setText] = useState('');
-    const [messages] = useState(DATA);
+    const [messages, setMessages] = useState();
     const messagesRef = collection(db, 'messages');
     const dummy = useRef();
 
     useEffect(() => {
-        // const queryMessages = query(
-        //     messagesRef,
-        //     orderBy('createdAt'),
-        //     limit(3)
-        // );
-        // const unsuscribe = onSnapshot(queryMessages, snapshot => {
-        //     let messages = [];
-        //     try {
-        //         snapshot.forEach(doc => {
-        //             const userIdMatch = doc.data().uid === user?.uid;
-        //             console.log(doc.data().uid, user?.uid);
-        //             messages.push({
-        //                 ...doc.data(),
-        //                 id: doc.id,
-        //                 key: doc.id,
-        //                 userIdMatch,
-        //             });
-        //         });
-        //         setMessages(messages);
-        //     } catch (e) {
-        //         console.log(e);
-        //     }
-        // });
-        // return () => unsuscribe();
+        const queryMessages = query(
+            messagesRef,
+            orderBy('createdAt', 'desc'),
+            limit(15)
+        );
+        const unsuscribe = onSnapshot(queryMessages, snapshot => {
+            let messages = [];
+            try {
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    messages.push({
+                        ...data,
+                        userIdMatch: data.uid === user?.uid,
+                    });
+                });
+                setMessages(messages);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+        return () => unsuscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -80,11 +66,11 @@ function App() {
             createdAt: serverTimestamp(),
         });
         setText('');
-        dummy.current.scrollIntoView({ behavior: 'smooth' });
+        // dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     if (!auth.currentUser) {
-        return <SignIn />;
+        return messages && <SignIn />;
     }
 
     return (
