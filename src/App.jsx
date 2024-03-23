@@ -115,8 +115,10 @@ function App() {
 }
 
 function SignIn() {
-    const signInWithGoogle = () => {
-        signInWithPopup(auth, new GoogleAuthProvider());
+    const signInWithGoogle = async () => {
+        await signInWithPopup(auth, new GoogleAuthProvider()).then(u =>
+            console.log('Logado como: ' + u.user.displayName.toString())
+        );
     };
 
     return (
