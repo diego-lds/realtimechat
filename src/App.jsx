@@ -9,6 +9,7 @@ import {
     orderBy,
     limit,
     onSnapshot,
+    getDoc,
 } from 'firebase/firestore';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -33,8 +34,9 @@ function App() {
         const queryMessages = query(
             messagesRef,
             orderBy('createdAt', 'desc'),
-            limit(15)
+            limit(30)
         );
+
         const unsuscribe = onSnapshot(queryMessages, snapshot => {
             let messages = [];
             try {
@@ -50,6 +52,7 @@ function App() {
                 console.log(e);
             }
         });
+
         return () => unsuscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
