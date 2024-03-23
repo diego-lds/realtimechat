@@ -116,9 +116,9 @@ function App() {
 
 function SignIn() {
     const signInWithGoogle = async () => {
-        await signInWithPopup(auth, new GoogleAuthProvider()).then(u =>
-            console.log('Logado como: ' + u.user.displayName.toString())
-        );
+        await signInWithPopup(auth, new GoogleAuthProvider())
+            .then(result => console.log(result))
+            .catch(error => console.error({ error }));
     };
 
     return (
