@@ -27,20 +27,19 @@ function App() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState();
     const messagesRef = collection(db, 'messages');
-    // const dummy = useRef();
 
     useEffect(() => {
         const queryMessages = query(
             messagesRef,
             orderBy('createdAt', 'desc'),
-            limit(30)
+            limit(15)
         );
-
         const unsuscribe = onSnapshot(queryMessages, snapshot => {
             let messages = [];
             try {
                 snapshot.forEach(doc => {
                     const data = doc.data();
+                    console.log(data);
                     messages.push({
                         ...data,
                         userIdMatch: data.uid === user?.uid,
@@ -51,7 +50,6 @@ function App() {
                 console.log(e);
             }
         });
-
         return () => unsuscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -89,7 +87,7 @@ function App() {
                     <SignOut />
                 </div>
             </header>
-            <section>
+            <section style={{ maxHeight: '110%', display: 'block' }}>
                 {messages && (
                     <ChatRoom
                         messages={messages}
@@ -98,11 +96,11 @@ function App() {
                 )}
             </section>
 
-            <form onSubmit={sendMessage} className=' fixed bottom-0 w-screen'>
+            <form onSubmit={sendMessage} className='sticky bottom-0 w-full'>
                 <input
                     type='text'
                     value={text}
-                    className='flex w-full min-h-[60px] rounded-md border border-stone-300 border-input  text-md shadow-sms placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+                    className='flex w-full min-h-[60px] p-1 rounded-md border border-stone-300 border-input text-md shadow-sms placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
                     onChange={e => setText(e.target.value)}
                     placeholder='Digite uma mensagem'
                 />

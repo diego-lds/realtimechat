@@ -1,6 +1,6 @@
 const ChatRoom = ({ messages, reference }) => {
     return (
-        <ul className='flex flex-col max-h-full bg-transparent '>
+        <ul className='flex flex-col bg-transparent '>
             {messages?.length &&
                 messages.map(msg => {
                     return <ChatMessage {...msg} />;
@@ -10,20 +10,33 @@ const ChatRoom = ({ messages, reference }) => {
     );
 };
 
-function ChatMessage({ photoURL, text, id, userIdMatch }) {
+function ChatMessage({
+    photoURL,
+    text,
+    id,
+    userIdMatch,
+    displayName,
+    createdAt,
+}) {
     return (
         <li
-            className={`flex p-2 ${userIdMatch ? 'flex-row-reverse' : ''}`}
+            className={`flex m-1 ${userIdMatch ? 'flex-row-reverse' : ''}`}
             key={id}
         >
             <img
-                className='rounded-full m-2 self-start drop-shadow-md'
+                className='m-2 rounded-full self-start'
                 alt='user face'
                 src={photoURL || 'default-profile.svg'}
-                width={45}
+                width={50}
             />
-            <div className='rounded-xl  rounded-tr-none border-gray-200  text-justify  break-all drop-shadow-lg p-2 bg-white'>
-                <p className='text-md font-sans'>{text}</p>
+
+            <div className='rounded-xl p-1 max-w-screen-sm rounded-tr-none border-gray-200  text-justify break-all drop-shadow-lg  bg-white'>
+                <span>
+                    <p className='text-sm font-san p-1 font-extrabold text-indigo-900'>
+                        {displayName}
+                    </p>
+                </span>
+                <p className='text-sm font-sans p-1'>{text}</p>
             </div>
         </li>
     );
