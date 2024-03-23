@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
     addDoc,
@@ -9,7 +9,6 @@ import {
     orderBy,
     limit,
     onSnapshot,
-    getDoc,
 } from 'firebase/firestore';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
@@ -28,7 +27,7 @@ function App() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState();
     const messagesRef = collection(db, 'messages');
-    const dummy = useRef();
+    // const dummy = useRef();
 
     useEffect(() => {
         const queryMessages = query(
@@ -69,7 +68,6 @@ function App() {
             createdAt: serverTimestamp(),
         });
         setText('');
-        // dummy.current.scrollIntoView({ behavior: 'smooth' });
     };
 
     if (!auth.currentUser) {
@@ -95,7 +93,6 @@ function App() {
                 {messages && (
                     <ChatRoom
                         messages={messages}
-                        reference={dummy}
                         userId={user?.currentUser?.uid}
                     />
                 )}
@@ -105,7 +102,7 @@ function App() {
                 <input
                     type='text'
                     value={text}
-                    className='flex w-full min-h-[60px]    rounded-md border border-stone-300 border-input  text-md shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+                    className='flex w-full min-h-[60px] rounded-md border border-stone-300 border-input  text-md shadow-sms placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
                     onChange={e => setText(e.target.value)}
                     placeholder='Digite uma mensagem'
                 />
