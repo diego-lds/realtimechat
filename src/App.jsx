@@ -74,7 +74,7 @@ function App() {
 
     return (
         <>
-            <header className='flex justify-between items-center bg-slate-900  text-white sticky top-0 z-10'>
+            <header className='flex justify-between items-center   text-white sticky top-0 z-10'>
                 <h1 className=' text-3xl font-bold '>Realtime Chat</h1>
                 <div className='flex items-center m-2 gap-x-3'>
                     <h4 className='text-xl'>{user?.displayName}</h4>
@@ -87,7 +87,7 @@ function App() {
                     <SignOut />
                 </div>
             </header>
-            <section style={{ maxHeight: '110%', display: 'block' }}>
+            <section>
                 {messages && (
                     <ChatRoom
                         messages={messages}
