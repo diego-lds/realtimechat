@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
     addDoc,
@@ -17,6 +17,8 @@ import { initializeApp } from 'firebase/app';
 import { config } from './firebaseConfig';
 
 import ChatRoom from './components/ChatRoom';
+import UserProfile from './components/UserProfile';
+import Input from './components/Input';
 
 const app = initializeApp(config);
 const db = getFirestore(app);
@@ -27,12 +29,13 @@ function App() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState();
     const messagesRef = collection(db, 'messages');
+    const dummy = useRef();
 
     useEffect(() => {
         const queryMessages = query(
             messagesRef,
             orderBy('createdAt', 'desc'),
-            limit(15)
+            limit(50)
         );
         const unsuscribe = onSnapshot(queryMessages, snapshot => {
             let messages = [];
@@ -46,6 +49,8 @@ function App() {
                     });
                 });
                 setMessages(messages);
+                // message sent ? screen should move up
+                dummy.current.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
                 console.log(e);
             }
@@ -74,37 +79,21 @@ function App() {
 
     return (
         <>
-            <header className='flex justify-between items-center   text-white sticky top-0 z-10'>
+            <header className='flex justify-between items-center bg-gray-700 text-white sticky top-0 z-10'>
                 <h1 className=' text-3xl font-bold '>Realtime Chat</h1>
-                <div className='flex items-center m-2 gap-x-3'>
-                    <h4 className='text-xl'>{user?.displayName}</h4>
-                    <img
-                        className='rounded-full border-2 '
-                        alt='User'
-                        src={user?.photoURL}
-                        width={55}
-                    />
-                    <SignOut />
-                </div>
+                <UserProfile user={user} />
+                <SignOut />
             </header>
             <section>
-                {messages && (
-                    <ChatRoom
-                        messages={messages}
-                        userId={user?.currentUser?.uid}
-                    />
-                )}
+                <span ref={dummy} />
+                <ChatRoom messages={messages} userId={user?.currentUser?.uid} />
             </section>
 
-            <form onSubmit={sendMessage} className='sticky bottom-0 w-full'>
-                <input
-                    type='text'
-                    value={text}
-                    className='flex w-full min-h-[60px] p-1 rounded-md border border-stone-300 border-input text-md shadow-sms placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-                    onChange={e => setText(e.target.value)}
-                    placeholder='Digite uma mensagem'
-                />
-            </form>
+            <footer className='fixed bottom-0 w-full'>
+                <form onSubmit={sendMessage}>
+                    <Input text={text} setText={setMessages} />
+                </form>
+            </footer>
         </>
     );
 }

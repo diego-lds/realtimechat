@@ -1,11 +1,11 @@
-const ChatRoom = ({ messages, reference }) => {
+const ChatRoom = ({ messages }) => {
+    if (!messages) return;
+    if (!messages.length) return;
     return (
         <ul className='flex flex-col bg-transparent '>
-            {messages?.length &&
-                messages.map(msg => {
-                    return <ChatMessage {...msg} />;
-                })}
-            <span ref={reference} />
+            {messages.map(msg => (
+                <ChatMessage {...msg} />
+            ))}
         </ul>
     );
 };
@@ -30,7 +30,7 @@ function ChatMessage({
                 width={50}
             />
 
-            <div className='rounded-xl p-1 max-w-screen-sm rounded-tr-none border-gray-200  text-justify break-all drop-shadow-lg  bg-white'>
+            <div className='rounded-xl p-1 max-w-screen-sm rounded-tr-none border-gray-200 text-justify break-all drop-shadow-lg  bg-white'>
                 <span>
                     <p className='text-sm font-san p-1 font-extrabold text-indigo-900'>
                         {displayName}
