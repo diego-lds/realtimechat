@@ -1,3 +1,4 @@
+# REALTIME CHAT
 Projeto de troca de mensagens para sala de bate-papo em tempo real utilizando React.js e Tailwind.css para o **frontend**. Para o **backend** foi utilizada a estrutura do Firebase.
 
 Tecnologias Utilizadas
