@@ -1,6 +1,6 @@
 import { limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 
-const LIMIT_MESSAGES = 5;
+const LIMIT_MESSAGES = 15;
 
 export function observeMessages(ref, setMessages) {
     const queryMessages = query(
