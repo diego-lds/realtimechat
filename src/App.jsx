@@ -1,9 +1,8 @@
 import ChatRoom from './components/ChatRoom';
 import Profile from './components/Profile';
 import Input from './components/Input';
-import GoogleIcon from './assets/google.svg';
 import ExitIcon from './assets/exit.svg';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { observeMessages } from './firebase/observers';
@@ -23,7 +22,7 @@ function App() {
     const [user] = useAuthState(auth);
     const [messages, setMessages] = useState();
     const [text, setText] = useState('');
-    const dummy = useRef();
+    // const dummy = useRef();
 
     useEffect(() => {
         const observer = observeMessages(messagesReference, setMessages);
@@ -64,7 +63,7 @@ function App() {
             </header>
             <Content className='flex flex-col px-3 mt-6 md:px-3'>
                 <section className=''>
-                    <span ref={dummy} />
+                    {/* <span ref={dummy} /> */}
                     {messages && user && (
                         <ChatRoom
                             messages={messages}
