@@ -38,7 +38,7 @@ function ChatMessage({
                         {displayName}
                     </p>
                 </span>
-                <p className='text-sm font-sans p-1'>{text}</p>
+                <p className='text-sm p-1'>{text}</p>
             </div>
         </li>
     );
