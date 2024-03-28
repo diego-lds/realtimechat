@@ -1,8 +1,10 @@
-const ChatRoom = ({ messages }) => {
+const ChatRoom = ({ messages, userId }) => {
+    console.table(messages, userId);
 
     return (
         <ul className='flex flex-col bg-transparent '>
-            {messages && messages.map(msg => <ChatMessage {...msg} />)}
+            {messages &&
+                messages.map(msg => <ChatMessage {...msg} userId={userId} />)}
         </ul>
     );
 };
@@ -11,23 +13,26 @@ function ChatMessage({
     photoURL,
     text,
     id,
-    userIdMatch,
+    userId,
     displayName,
-    createdAt,
+
+    sender,
 }) {
+    const matchMe = userId !== sender;
     return (
         <li
-            className={`flex m-1 ${userIdMatch ? 'flex-row-reverse' : ''}`}
+            className={`flex m-1 mensagem ${matchMe ? 'flex-row-reverse' : ''}`}
             key={id}
         >
             <img
-                className='m-2 rounded-full self-start'
+                className='m-2 rounded-full self-start border-t-green-900'
                 alt='user face'
                 src={photoURL || 'default-profile.svg'}
                 width={50}
+                height={50}
             />
 
-            <div className='rounded-xl p-1 max-w-screen-sm rounded-tr-none border-gray-200 text-justify break-all drop-shadow-lg  bg-white'>
+            <div className=' rounded-xl p-1 max-w-screen-sm  border-gray-200 text-justify break-all drop-shadow-lg  bg-white'>
                 <span>
                     <p className='text-sm font-san p-1 font-extrabold text-indigo-900'>
                         {displayName}
