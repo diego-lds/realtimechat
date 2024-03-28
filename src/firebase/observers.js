@@ -12,9 +12,8 @@ export function observeMessages(ref, setMessages) {
         let messages = [];
         try {
             snapshot.forEach(doc => {
-                const data = doc.data();
                 messages.push({
-                    ...data,
+                    ...doc.data(),
                 });
             });
 
