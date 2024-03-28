@@ -25,7 +25,7 @@ function ChatMessage({
             key={id}
         >
             <img
-                className='m-2 rounded-full self-start border-t-green-900'
+                className='m-2 rounded-full self-start'
                 alt='user face'
                 src={photoURL || 'default-profile.svg'}
                 width={50}

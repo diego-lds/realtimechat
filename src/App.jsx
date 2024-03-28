@@ -54,7 +54,7 @@ function App() {
     };
 
     return (
-        <main className='h-screen'>
+        <main className='h-full'>
             <header className='flex justify-between items-center  text-white sticky top-0 z-10'>
                 <h1 className='flex-1 ml-1 invisible md:visible'>
                     Realtime Chat
@@ -62,7 +62,7 @@ function App() {
                 <Profile className='mr-1' user={user} />
                 <SignOutButton />
             </header>
-            <Content className='flex flex-col px-1 mt-6 md:px-3'>
+            <Content className='flex flex-col px-3 mt-6 md:px-3'>
                 <section className=''>
                     <span ref={dummy} />
                     {messages && user && (
