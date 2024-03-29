@@ -4,7 +4,9 @@ const ChatRoom = ({ messages, userId }) => {
     return (
         <ul className='flex flex-col bg-transparent '>
             {messages &&
-                messages.map(msg => <ChatMessage {...msg} userId={userId} />)}
+                messages.map((msg, index) => (
+                    <ChatMessage {...msg} userId={userId} index={index} />
+                ))}
         </ul>
     );
 };
@@ -15,11 +17,10 @@ export function ChatMessage({
     id,
     userId,
     displayName,
-
     sender,
 }) {
     const matchMe = userId !== sender;
-    console.log(userId, sender);
+
     return (
         <li
             className={`flex m-1 mensagem ${matchMe ? 'flex-row-reverse' : ''}`}
@@ -35,9 +36,7 @@ export function ChatMessage({
 
             <div className=' rounded-xl p-1 max-w-screen-sm  border-gray-200 text-justify break-all drop-shadow-lg  bg-white'>
                 <span>
-                    <p className='text-sm font-san p-1 font-extrabold text-indigo-900'>
-                        {displayName}
-                    </p>
+                    <p className='p-1 text-indigo-900'>{displayName}</p>
                 </span>
                 <p className='text-sm p-1'>{text}</p>
             </div>

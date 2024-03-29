@@ -1,8 +1,9 @@
-import _ from 'lodash';
 import ChatRoom from './components/ChatRoom';
 import Profile from './components/Profile';
 import ExitIcon from './assets/exit.svg';
-import { useEffect, useState } from 'react';
+import Content from './components/Content';
+
+import { useEffect, useRef, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { observeMessages } from './firebase/observers';
@@ -10,20 +11,16 @@ import { sendMessageToFirestore } from './firebase/service';
 import { collection, getFirestore, serverTimestamp } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { config } from './firebase/config';
-import Content from './components/Content';
 
 const app = initializeApp(config);
 const db = getFirestore(app);
 const messagesReference = collection(db, 'messages');
-
 const auth = getAuth();
 
 function App() {
     const [user] = useAuthState(auth);
     const [messages, setMessages] = useState([]);
-    const [text, setText] = useState('');
-
-    // const dummy = useRef();
+    const inputRef = useRef('');
 
     useEffect(() => {
         const observer = observeMessages(messagesReference, setMessages);
@@ -35,26 +32,19 @@ function App() {
         event.preventDefault();
 
         sendMessageToFirestore(messagesReference, {
-            text,
+            text: inputRef.current.valueOf,
             uid: user.uid,
             sender: user.uid,
             photoURL: user.photoURL,
             displayName: user.displayName,
             createdAt: serverTimestamp(),
         });
-        setText('');
+        inputRef.current.valueOf = '';
     };
 
     if (!auth.currentUser) {
         return messages && <SignIn />;
     }
-
-    const handleChange = event => {
-        const value = event.target.value;
-        setText(value);
-        handleDebouncedChange(value);
-    };
-    const handleDebouncedChange = _.debounce(value => {}, 300);
 
     return (
         <main className='h-full'>
@@ -65,7 +55,6 @@ function App() {
             </header>
             <Content className='flex flex-col px-3 mt-6 md:px-3'>
                 <section className=''>
-                    {/* <span ref={dummy} /> */}
                     {messages && user && (
                         <ChatRoom
                             messages={messages}
@@ -73,18 +62,20 @@ function App() {
                         />
                     )}
                 </section>
-                <footer className='fixed bottom-0 w-full'>
-                    <form onSubmit={handleSendMessage}>
-                        <input
-                            type='text'
-                            value={text}
-                            className='w-full  p-1 rounded-md border border-stone-300 border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-                            onChange={handleChange}
-                            placeholder='Digite uma mensagem'
-                        />
-                    </form>
-                </footer>
             </Content>
+            <footer className='fixed bottom-0 w-full'>
+                <form onSubmit={handleSendMessage}>
+                    <input
+                        ref={inputRef}
+                        type='text'
+                        className='w-full text-muted-foreground  p-1 rounded-md border border-stone-300 border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed '
+                        autoComplete='off'
+                        spellCheck='false'
+                        inputMode='verbatim'
+                        maxLength={100}
+                    />
+                </form>
+            </footer>
         </main>
     );
 }
