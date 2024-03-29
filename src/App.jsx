@@ -3,7 +3,7 @@ import Profile from './components/Profile';
 import ExitIcon from './assets/exit.svg';
 import Content from './components/Content';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { observeMessages } from './firebase/observers';
@@ -30,16 +30,16 @@ function App() {
 
     const handleSendMessage = async event => {
         event.preventDefault();
-
+        if (inputRef.current.value === '') return;
         sendMessageToFirestore(messagesReference, {
-            text: inputRef.current.valueOf,
+            text: inputRef.current.value,
             uid: user.uid,
             sender: user.uid,
             photoURL: user.photoURL,
             displayName: user.displayName,
             createdAt: serverTimestamp(),
         });
-        inputRef.current.valueOf = '';
+        inputRef.current.value = '';
     };
 
     if (!auth.currentUser) {
@@ -47,7 +47,7 @@ function App() {
     }
 
     return (
-        <main className='h-full'>
+        <main className='h-full scroll-my-0'>
             <header className='flex justify-between items-center  text-white sticky top-0 z-10'>
                 {/* <h1 className=' ml-1'>Realtime Chat</h1> */}
                 <Profile className='mr-1' user={user} />
@@ -55,12 +55,14 @@ function App() {
             </header>
             <Content className='flex flex-col px-3 mt-6 md:px-3'>
                 <section className=''>
-                    {messages?.length && user && (
-                        <ChatRoom
-                            messages={messages}
-                            userId={user?.currentUser?.uid}
-                        />
-                    )}
+                    <Suspense fallback={<span>Carregando...</span>}>
+                        {messages?.length && user && (
+                            <ChatRoom
+                                messages={messages}
+                                userId={user?.currentUser?.uid}
+                            />
+                        )}
+                    </Suspense>
                 </section>
             </Content>
             <footer className='fixed bottom-0 w-full'>
@@ -87,7 +89,12 @@ function SignOutButton() {
             onClick={() => auth.signOut()}
         >
             <span>
-                <img src={ExitIcon} alt='empty profile' />
+                <img
+                    src={ExitIcon}
+                    alt='empty profile'
+                    width={24}
+                    height={24}
+                />
             </span>
         </button>
     );

@@ -6,7 +6,7 @@ const ChatRoom = ({ messages }) => {
             {messages &&
                 messages.map(m => (
                     <li
-                        className={`flex m-1 mensagem ${
+                        className={`flex m-1 message-animation ${
                             m.sender !== m.uid ? 'flex-row-reverse' : ''
                         }`}
                         key={m.msgId}
