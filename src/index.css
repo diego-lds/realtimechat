@@ -36,16 +36,3 @@ p{
 }
 
 
-  .message-animation {
-    animation: move 0.5s ease forwards;
-  }
-  
-  @keyframes move {
-    0% {
-      transform: translateX(-50px);
-    }
-    
-    100% {
-      transform: translateX(0);
-    }
-  }

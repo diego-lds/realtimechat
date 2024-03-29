@@ -70,7 +70,8 @@ function App() {
                     <input
                         ref={inputRef}
                         type='text'
-                        className='w-full text-muted-foreground  p-1 rounded-md border border-stone-300 border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed '
+                        placeholder='Digite algo...'
+                        className='w-full text-muted-foreground  p-2 rounded-md border border-stone-300 border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed '
                         autoComplete='off'
                         spellCheck='false'
                         inputMode='verbatim'
