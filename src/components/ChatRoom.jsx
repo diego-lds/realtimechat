@@ -4,11 +4,9 @@ const ChatRoom = ({ messages }) => {
     return (
         <ul className='flex flex-col bg-transparent '>
             {messages &&
-                messages.map(m => (
+                messages.map((m, i) => (
                     <li
-                        className={`flex m-1 message-animation ${
-                            m.sender !== m.uid ? 'flex-row-reverse' : ''
-                        }`}
+                        className={`flex m-1 ${i < 1 && 'message-animation'}`}
                         key={m.msgId}
                     >
                         <img
