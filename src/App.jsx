@@ -1,8 +1,6 @@
-import { useMemo } from 'react';
 import _ from 'lodash';
-import ChatRoom, { ChatMessage } from './components/ChatRoom';
+import ChatRoom from './components/ChatRoom';
 import Profile from './components/Profile';
-import Input from './components/Input';
 import ExitIcon from './assets/exit.svg';
 import { useEffect, useState } from 'react';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
