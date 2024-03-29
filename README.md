@@ -2,11 +2,10 @@
 Projeto de troca de mensagens para sala de bate-papo em tempo real utilizando React.js e Tailwind.css para o **frontend**. Para o **backend** foi utilizada a estrutura do Firebase.
 
 Tecnologias Utilizadas
-
 **React +  Tailwind + Firebase**
 
 ## Versão de produção (hospedado na vercel)
-
+![image](https://github.com/diego-lds/realtimechat/assets/4356478/510a7e5e-d0e3-4332-9902-da009656283f)
 ---
 
 https://realtimechat-one.vercel.app/
