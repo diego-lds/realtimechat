@@ -55,7 +55,7 @@ function App() {
             </header>
             <Content className='flex flex-col px-3 mt-6 md:px-3'>
                 <section className=''>
-                    {messages && user && (
+                    {messages?.length && user && (
                         <ChatRoom
                             messages={messages}
                             userId={user?.currentUser?.uid}

@@ -10,14 +10,16 @@ export function observeMessages(ref, setMessages) {
     );
     return onSnapshot(queryMessages, snapshot => {
         let messages = [];
+
         try {
             snapshot.forEach(doc => {
                 messages.push({
                     ...doc.data(),
+                    msgId: doc.id,
                 });
             });
 
-            setMessages(messages);
+            setMessages([...messages]);
         } catch (e) {
             console.log(e);
         }
