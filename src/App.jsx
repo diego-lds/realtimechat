@@ -1,4 +1,6 @@
-import ChatRoom from './components/ChatRoom';
+import { useMemo } from 'react';
+import _ from 'lodash';
+import ChatRoom, { ChatMessage } from './components/ChatRoom';
 import Profile from './components/Profile';
 import Input from './components/Input';
 import ExitIcon from './assets/exit.svg';
@@ -20,8 +22,9 @@ const auth = getAuth();
 
 function App() {
     const [user] = useAuthState(auth);
-    const [messages, setMessages] = useState();
+    const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
+
     // const dummy = useRef();
 
     useEffect(() => {
@@ -48,16 +51,17 @@ function App() {
         return messages && <SignIn />;
     }
 
-    const handleInputText = input => {
-        setText(input);
+    const handleChange = event => {
+        const value = event.target.value;
+        setText(value);
+        handleDebouncedChange(value);
     };
+    const handleDebouncedChange = _.debounce(value => {}, 300);
 
     return (
         <main className='h-full'>
             <header className='flex justify-between items-center  text-white sticky top-0 z-10'>
-                <h1 className='flex-1 ml-1 invisible md:visible'>
-                    Realtime Chat
-                </h1>
+                {/* <h1 className=' ml-1'>Realtime Chat</h1> */}
                 <Profile className='mr-1' user={user} />
                 <SignOutButton />
             </header>
@@ -73,7 +77,13 @@ function App() {
                 </section>
                 <footer className='fixed bottom-0 w-full'>
                     <form onSubmit={handleSendMessage}>
-                        <Input text={text} setText={handleInputText} />
+                        <input
+                            type='text'
+                            value={text}
+                            className='w-full  p-1 rounded-md border border-stone-300 border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+                            onChange={handleChange}
+                            placeholder='Digite uma mensagem'
+                        />
                     </form>
                 </footer>
             </Content>

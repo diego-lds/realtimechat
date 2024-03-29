@@ -1,5 +1,5 @@
 const ChatRoom = ({ messages, userId }) => {
-    console.table(messages, userId);
+    console.log('Chat ROom');
 
     return (
         <ul className='flex flex-col bg-transparent '>
@@ -9,7 +9,7 @@ const ChatRoom = ({ messages, userId }) => {
     );
 };
 
-function ChatMessage({
+export function ChatMessage({
     photoURL,
     text,
     id,
@@ -19,6 +19,7 @@ function ChatMessage({
     sender,
 }) {
     const matchMe = userId !== sender;
+    console.log(userId, sender);
     return (
         <li
             className={`flex m-1 mensagem ${matchMe ? 'flex-row-reverse' : ''}`}
