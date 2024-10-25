@@ -30,7 +30,7 @@ export function observeMessages2(ref, setMessages, currentUserId, myId) {
   console.log({ currentUserId, myId });
   const queryMessages = query(
     ref,
-    where("sender", "in", [currentUserId, myId]),
+    where("receiver", "in", [currentUserId, myId]),
 
     orderBy("createdAt", "desc"),
     limit(LIMIT_MESSAGES)
