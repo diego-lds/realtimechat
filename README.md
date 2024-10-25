@@ -5,10 +5,11 @@ Tecnologias Utilizadas
 **React +  Tailwind + Firebase**
 
 ## Versão de produção (hospedado na vercel)
-![image](https://github.com/diego-lds/realtimechat/assets/4356478/510a7e5e-d0e3-4332-9902-da009656283f)
 ---
-
+##Link para o projeto em produção
 https://realtimechat-one.vercel.app/
+![image](https://github.com/diego-lds/realtimechat/assets/4356478/5d499788-0069-42d4-8a8e-b0062d6ec2cf)
+
 
 ## Rodando o projeto localmente
 
