@@ -21,7 +21,7 @@ const ChatRoom = ({ messages, firstMessageRef }) => {
               <span>
                 <p className="p-1 text-indigo-900">{m.displayName}</p>
               </span>
-              <p className="text-sm p-1">{m.message}</p>
+              <p className="text-sm p-1">{m.text}</p>
             </div>
           </li>
         ))}

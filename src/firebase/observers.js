@@ -26,12 +26,10 @@ export function observeMessages(ref, setMessages) {
   });
 }
 
-export function observeMessages2(ref, setMessages, currentUserId, myId) {
-  console.log({ currentUserId, myId });
+export function observePrivateChat(ref, setMessages, currentUserId, myId) {
   const queryMessages = query(
     ref,
-    where("receiver", "in", [currentUserId, myId]),
-
+    where("receiver", "in", [myId]),
     orderBy("createdAt", "desc"),
     limit(LIMIT_MESSAGES)
   );

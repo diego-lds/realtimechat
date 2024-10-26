@@ -5,8 +5,11 @@ import ExitIcon from "./assets/exit.svg";
 import Content from "./components/Content";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { observeMessages2 } from "./firebase/observers";
-import { sendMessageToFirestore } from "./firebase/service";
+import { observePrivateChat } from "./firebase/observers";
+import {
+  sendMessageToFirestore,
+  sendPrivateMesssage,
+} from "./firebase/service";
 import { collection, getFirestore, serverTimestamp } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { config } from "./firebase/config";
@@ -15,7 +18,7 @@ const myId = "PYBzLBVgQJex85QCyCEKHNU94zl2";
 
 const app = initializeApp(config);
 const db = getFirestore(app);
-const messagesReference = collection(db, "messages");
+const messagesReference = collection(db, "private-messages");
 const auth = getAuth();
 
 function App() {
@@ -25,7 +28,7 @@ function App() {
   const firstMessageRef = useRef(null); // Ref para a primeira mensagem
   useEffect(() => {
     if (!user) return;
-    const observer = observeMessages2(
+    const observer = observePrivateChat(
       messagesReference,
       setMessages,
       user.uid,
@@ -49,8 +52,7 @@ function App() {
     if (!message) return;
 
     await sendMessageToFirestore(messagesReference, {
-      text: message,
-      uid: user.uid,
+      message: message,
       sender: user.uid,
       receiver: myId,
       photoURL: user.photoURL,
