@@ -4,7 +4,7 @@ import { db } from "../App";
 
 function Sidebar({ currentUserId, openChat }) {
   const [users, setUsers] = useState([]);
-
+  console.log(users);
   useEffect(() => {
     const fetchUsers = async () => {
       try {

@@ -1,9 +1,28 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { db } from "../App"; // Importe sua instância do Firestore
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 function SignIn() {
   const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(getAuth(), provider);
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(getAuth(), provider);
+      const { user } = result;
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          createdAt: new Date(),
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao fazer login com Google:", error);
+    }
   };
 
   return (
