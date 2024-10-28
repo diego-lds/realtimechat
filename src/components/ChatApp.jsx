@@ -25,11 +25,11 @@ function ChatApp() {
         <SignOutButton handleSignOut={() => auth.signOut()} />
       </header>
 
-      <div className="flex">
+      <div className="flex overflow-y-auto">
         <div className="min-h-screen flex-0">
           <Sidebar currentUserId={user.uid} openChat={openChat} />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           {/* <Content className="flex   bg-slate-100  overflow-y-auto"> */}
           {activeChat ? (
             <ChatRoom
